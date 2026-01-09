@@ -1,0 +1,36 @@
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 50px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 50px;
+  z-index: 1000;
+}
+
+.left-section {
+  background-color: lightblue;
+  width: 200px;
+}
+.middle-section {
+  flex: 3;
+  background-color: lightgreen;
+  width: 500px;
+}
+.right-section {
+  flex: 1;
+  background-color: lightcoral;
+}
+
+.sidebar {
+  position: fixed;
+  top: 50px;
+  left: 0;
+  width: 200px;
+  height: 100%;
+  background-color: gray;
+}

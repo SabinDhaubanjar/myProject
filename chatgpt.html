@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home Page</title>
+  <style>
+    * {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding-top: 50px;   /* space for fixed header */
+  font-family: Arial, sans-serif;
+}
+
+/* HEADER */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 50px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  background: white;
+  z-index: 1000;
+}
+
+.left-section {
+  width: 200px;
+  background-color: lightblue;
+}
+
+.middle-section {
+  flex: 1;
+  background-color: lightgreen;
+}
+
+.right-section {
+  width: 150px;
+  background-color: lightcoral;
+}
+
+/* SIDEBAR */
+.sidebar {
+  position: fixed;
+  top: 50px;
+  left: 0;
+  width: 200px;
+  height: calc(100vh - 50px);
+  background-color: gray;
+  padding: 10px;
+}
+
+/* MAIN CONTENT */
+.content {
+  margin-left: 200px;
+  padding: 20px;
+  background-color: lightgray;
+  min-height: 100vh;
+}
+
+/* SHOP NOW */
+.shop-now {
+  height: 500px;
+  background-color: wheat;
+  margin-bottom: 20px;
+}
+
+/* FEATURED PRODUCTS */
+.featured-product {
+  background-color: beige;
+  padding: 20px;
+}
+
+.featured-product-section {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.product-column {
+  padding: 15px;
+  background: white;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+.product-column img {
+  width: 100%;
+  height: auto;
+}
+
+/* FOOTER */
+.footer {
+  margin-left: 200px;
+  padding: 20px;
+  background-color: #333;
+  color: white;
+  text-align: center;
+}
+
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    <div class="left-section">Left Section</div>
+    <div class="middle-section">Middle Section</div>
+    <div class="right-section">Right Section</div>
+  </div>
+
+  <div class="sidebar">
+    Sidebar
+  </div>
+
+  <div class="content">
+    <div class="shop-now">
+      Shop Now
+    </div>
+
+    <div class="featured-product">
+      <p class="featured-product-section">Featured Product</p>
+
+      <div class="product-grid">
+        <div class="product-column">
+          <img src="images/product.jpg" alt="Product Image">
+          <h2>Product Name</h2>
+          <p>Product Description goes here.</p>
+          <p class="price">$99.99</p>
+          <button class="buy-now">Buy Now</button>
+        </div>
+
+        <div class="product-column">
+          <img src="images/product.jpg" alt="Product Image">
+          <h2>Product Name</h2>
+          <p>Product Description goes here.</p>
+          <p class="price">$99.99</p>
+          <button class="buy-now">Buy Now</button>
+        </div>
+
+        <div class="product-column">
+          <img src="images/product.jpg" alt="Product Image">
+          <h2>Product Name</h2>
+          <p>Product Description goes here.</p>
+          <p class="price">$99.99</p>
+          <button class="buy-now">Buy Now</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Footer Section
+  </div>
+
+</body>
+</html>
