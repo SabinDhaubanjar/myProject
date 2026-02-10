@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product - Market Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2d3748;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s;
+            background-color: #f7fafc;
+            color: #2d3748;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #a0aec0;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* Custom File Upload */
+        .file-upload-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+
+        input[type="file"] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-upload-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 12px 16px;
+            background-color: #f7fafc;
+            border: 2px dashed #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #718096;
+            font-size: 15px;
+        }
+
+        .file-upload-label:hover {
+            border-color: #667eea;
+            background-color: rgba(102, 126, 234, 0.05);
+        }
+
+        .file-upload-label.has-file {
+            border-color: #667eea;
+            background-color: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            border-style: solid;
+        }
+
+        .upload-icon {
+            font-size: 20px;
+        }
+
+        .file-name {
+            font-weight: 500;
+        }
+
+        /* Image Preview */
+        .image-preview {
+            margin-top: 15px;
+            display: none;
+        }
+
+        .image-preview.show {
+            display: block;
+        }
+
+        .preview-img {
+            width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        button[type="submit"],
+        input[type="submit"] {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        button[type="submit"]:hover,
+        input[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        button[type="submit"]:active,
+        input[type="submit"]:active {
+            transform: translateY(0);
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .back-link a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 550px) {
+            .container {
+                padding: 30px 25px;
+            }
+
+            h2 {
+                font-size: 26px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Add New Product</h2>
+        <form action="add_product.php" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="product_name">Product Name</label>
+                <input type="text" id="product_name" name="product_name" placeholder="Enter product name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="product_image">Product Image</label>
+                <div class="file-upload-wrapper">
+                    <input type="file" id="product_image" name="product_image" accept="image/*" required onchange="previewImage(event)">
+                    <label for="product_image" class="file-upload-label" id="file-label">
+                        <span class="upload-icon">📷</span>
+                        <span class="file-name">Choose an image</span>
+                    </label>
+                </div>
+                <div class="image-preview" id="image-preview">
+                    <img id="preview-img" class="preview-img" src="" alt="Preview">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="price">Price</label>
+                <input type="text" id="price" name="price" placeholder="Enter price" required>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" placeholder="Enter product description" required></textarea>
+            </div>
+
+            <input type="submit" value="Add Product">
+        </form>
+
+        <div class="back-link">
+            <a href="homePage.php">← Back to Home</a>
+        </div>
+    </div>
+
+    <script>
+        function previewImage(event) {
+            const file = event.target.files[0];
+            const fileLabel = document.getElementById('file-label');
+            const fileName = fileLabel.querySelector('.file-name');
+            const preview = document.getElementById('image-preview');
+            const previewImg = document.getElementById('preview-img');
+
+            if (file) {
+                fileName.textContent = file.name;
+                fileLabel.classList.add('has-file');
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    preview.classList.add('show');
+                }
+                reader.readAsDataURL(file);
+            } else {
+                fileName.textContent = 'Choose an image';
+                fileLabel.classList.remove('has-file');
+                preview.classList.remove('show');
+            }
+        }
+    </script>
+</body>
+</html>

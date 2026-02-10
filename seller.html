@@ -3,8 +3,349 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Seller</title>
-  <link rel="stylesheet" href="styles/seller.css">
+  <title>Seller Dashboard - Market Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background-color: #f5f7fa;
+      color: #2d3748;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 70px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 0 30px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+    }
+
+    .left-section {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo {
+      height: 45px;
+    }
+
+    .middle-section {
+      flex: 1;
+      text-align: center;
+      color: white;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .right-section {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      color: white;
+      font-weight: 500;
+    }
+
+    /* Navigation Bar */
+    .nav-bar {
+      display: flex;
+      gap: 5px;
+      background-color: white;
+      padding: 15px 30px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      position: fixed;
+      top: 70px;
+      left: 0;
+      right: 0;
+      z-index: 999;
+    }
+
+    .nav-link {
+      padding: 8px 20px;
+      text-decoration: none;
+      color: #2d3748;
+      font-weight: 500;
+      border-radius: 8px;
+      transition: all 0.3s;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+      color: #667eea;
+    }
+
+    /* Body Section */
+    .body-section {
+      display: flex;
+      margin-top: 130px;
+      min-height: calc(100vh - 130px);
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 250px;
+      background-color: white;
+      padding: 20px 0;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+      position: fixed;
+      left: 0;
+      top: 130px;
+      bottom: 0;
+      overflow-y: auto;
+    }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      padding: 15px 25px;
+      text-decoration: none;
+      color: #2d3748;
+      font-weight: 500;
+      transition: all 0.3s;
+      border-left: 4px solid transparent;
+    }
+
+    .sidebar-link:hover {
+      background-color: rgba(102, 126, 234, 0.05);
+      border-left-color: #667eea;
+      padding-left: 30px;
+    }
+
+    .sidebar-link.active {
+      background: linear-gradient(90deg, rgba(102, 126, 234, 0.1) 0%, transparent 100%);
+      border-left-color: #667eea;
+      color: #667eea;
+      font-weight: 600;
+    }
+
+    /* Main Content */
+    .body-right-section {
+      margin-left: 250px;
+      flex: 1;
+      padding: 30px;
+    }
+
+    /* Welcome Card */
+    .right-top {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 40px;
+      border-radius: 15px;
+      color: white;
+      margin-bottom: 30px;
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .right-top p:first-child {
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .right-top p:nth-child(2) {
+      font-size: 15px;
+      opacity: 0.9;
+      margin-bottom: 25px;
+    }
+
+    .add-product-button {
+      padding: 12px 30px;
+      background-color: white;
+      color: #667eea;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .add-product-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Recent Orders Section */
+    .right-middle {
+      background-color: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .recent-order-text {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 25px;
+      color: #2d3748;
+    }
+
+    .order-details {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .order-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      background-color: #f7fafc;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      transition: all 0.3s;
+    }
+
+    .order-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      border-color: #667eea;
+    }
+
+    .order-item-left {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .customer-image {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .order-item-left-info {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .order-no {
+      font-weight: 600;
+      font-size: 16px;
+      color: #2d3748;
+    }
+
+    .product-status {
+      font-size: 14px;
+      color: #718096;
+    }
+
+    .order-item-right {
+      display: flex;
+      gap: 10px;
+    }
+
+    .status-btn {
+      padding: 8px 20px;
+      background: linear-gradient(135deg, #ffa726 0%, #fb8c00 100%);
+      color: white;
+      border: none;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .status-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(255, 167, 38, 0.4);
+    }
+
+    .status-btn.completed {
+      background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+    }
+
+    .status-btn.shipped {
+      background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 200px;
+      }
+
+      .body-right-section {
+        margin-left: 200px;
+        padding: 20px;
+      }
+
+      .header {
+        padding: 0 15px;
+      }
+
+      .nav-bar {
+        padding: 10px 15px;
+        overflow-x: auto;
+      }
+
+      .middle-section {
+        font-size: 16px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .sidebar {
+        position: fixed;
+        left: -250px;
+        width: 250px;
+        transition: left 0.3s;
+        z-index: 998;
+      }
+
+      .sidebar.active {
+        left: 0;
+      }
+
+      .body-right-section {
+        margin-left: 0;
+        padding: 15px;
+      }
+
+      .right-top {
+        padding: 25px;
+      }
+
+      .right-top p:first-child {
+        font-size: 22px;
+      }
+
+      .right-middle {
+        padding: 20px;
+      }
+
+      .order-item {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+      }
+
+      .middle-section {
+        display: none;
+      }
+    }
+  </style>
 </head>
 
 <body>
@@ -13,12 +354,14 @@
     <div class="left-section">
       <img src="images/sample-logo-white.png" alt="Logo" class="logo">
     </div>
-    <div class="middle-section">Middle Section</div>
-    <div class="right-section">Right Section</div>
+    <div class="middle-section">Seller Dashboard</div>
+    <div class="right-section">
+      <span>👤 Account</span>
+    </div>
   </div>
 
   <nav class="nav-bar">
-    <a href="#" class="nav-link">Home</a>
+    <a href="#" class="nav-link active">Home</a>
     <a href="#" class="nav-link">Shop</a>
     <a href="#" class="nav-link">Deals</a>
     <a href="#" class="nav-link">Contact</a>
@@ -27,32 +370,34 @@
   <div class="body-section">
 
     <div class="sidebar">
-      <a href="#" class="sidebar-link">Dashboard</a>
-      <a href="#" class="sidebar-link">My Products</a>
-      <a href="#" class="sidebar-link">Orders</a>
-      <a href="#" class="sidebar-link">Profile</a>
+      <a href="#" class="sidebar-link active">📊 Dashboard</a>
+      <a href="#" class="sidebar-link">📦 My Products</a>
+      <a href="#" class="sidebar-link">🛒 Orders</a>
+      <a href="#" class="sidebar-link">👤 Profile</a>
+      <a href="#" class="sidebar-link">⚙️ Settings</a>
+      <a href="#" class="sidebar-link">📈 Analytics</a>
     </div>
 
     <div class="body-right-section">
 
       <div class="right-top">
-        <p><strong>Welcome User</strong></p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-        <button class="add-product-button">Add New Product</button>
+        <p>Welcome Back, User!</p>
+        <p>Manage your products, track orders, and grow your business with our easy-to-use seller dashboard.</p>
+        <button class="add-product-button">+ Add New Product</button>
       </div>
 
       <div class="right-middle">
-        <p class="recent-order-text"><strong>Recent Orders</strong></p>
+        <p class="recent-order-text">Recent Orders</p>
 
         <div class="order-details">
 
           <div class="order-item">
             <div class="order-item-left">
-              <img src="cat.jpg" alt="Customer Image" class="customer-image">
+              <img src="cat.jpg" alt="Product Image" class="customer-image">
 
               <div class="order-item-left-info">
                 <p class="order-no">Order #1234</p>
-                <p class="product-status">Product Status</p>
+                <p class="product-status">Wireless Headphones • 2 items</p>
               </div>
             </div>
 
@@ -63,16 +408,31 @@
 
           <div class="order-item">
             <div class="order-item-left">
-              <img src="cat.jpg" alt="Customer Image" class="customer-image">
+              <img src="cat.jpg" alt="Product Image" class="customer-image">
 
               <div class="order-item-left-info">
                 <p class="order-no">Order #1235</p>
-                <p class="product-status">Product Status</p>
+                <p class="product-status">Smart Watch • 1 item</p>
               </div>
             </div>
 
             <div class="order-item-right">
-              <button class="status-btn">Processing</button>
+              <button class="status-btn shipped">Shipped</button>
+            </div>
+          </div>
+
+          <div class="order-item">
+            <div class="order-item-left">
+              <img src="cat.jpg" alt="Product Image" class="customer-image">
+
+              <div class="order-item-left-info">
+                <p class="order-no">Order #1236</p>
+                <p class="product-status">Laptop Stand • 3 items</p>
+              </div>
+            </div>
+
+            <div class="order-item-right">
+              <button class="status-btn completed">Completed</button>
             </div>
           </div>
 
@@ -81,6 +441,14 @@
 
     </div>
   </div>
+
+
+  <script>
+    const addBtn = document.querySelector('.add-product-button');
+    addBtn.addEventListener('click', () => {
+      window.location.href = 'add_product.html';
+    });
+  </script>
 
 </body>
 </html>
