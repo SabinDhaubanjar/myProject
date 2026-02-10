@@ -1,9 +1,9 @@
 <?php
 // Connect to the database
-$servername = "localhost"; // default localhost
-$username = "root";        // default username in XAMPP
-$password = "";            // default is an empty password for XAMPP
-$dbname = "testdb"; // database name you created
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "test";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -21,6 +21,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $dob = $_POST['dob'];
     $gender = $_POST['gender'];
 
+    // Check if email already exists
+    $check_stmt = $conn->prepare("SELECT id FROM users WHERE email = ?");
+    $check_stmt->bind_param("s", $email);
+    $check_stmt->execute();
+    $check_result = $check_stmt->get_result();
+
+    if ($check_result->num_rows > 0) {
+        echo "<script>
+            alert('Email already registered! Please use a different email.');
+            window.location.href = 'register.html';
+        </script>";
+        exit();
+    }
+    $check_stmt->close();
+
     // Hash the password for security
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
@@ -30,9 +45,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Execute the query
     if ($stmt->execute()) {
-        echo "Registration successful!";
+        echo "<script>
+            alert('Registration successful! Please login.');
+            window.location.href = 'login.html';
+        </script>";
     } else {
-        echo "Error: " . $stmt->error;
+        echo "<script>
+            alert('Error: " . $stmt->error . "');
+            window.location.href = 'register.html';
+        </script>";
     }
 
     // Close the statement and connection

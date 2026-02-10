@@ -2,7 +2,7 @@
 session_start();
 
 // Database connection
-$conn = new mysqli("localhost", "root", "", "testdb");
+$conn = new mysqli("localhost", "root", "", "test");
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
@@ -30,7 +30,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['username'];
 
-            header("Location: dashboard.php");
+            echo "<script>
+                alert('Login successful!');
+                window.location.href = 'homePage.php';
+            </script>";
             exit();
         } else {
             // Wrong password

@@ -1,3 +1,29 @@
+<?php
+session_start();
+
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.html");
+    exit();
+}
+
+// Connect to database
+$conn = new mysqli("localhost", "root", "", "test");
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Get user details
+$user_id = $_SESSION['user_id'];
+$stmt = $conn->prepare("SELECT username FROM users WHERE id = ?");
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
+$stmt->close();
+$conn->close();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -356,15 +382,15 @@
     </div>
     <div class="middle-section">Seller Dashboard</div>
     <div class="right-section">
-      <span>👤 Account</span>
+      <span>👤 <?php echo htmlspecialchars($user['username']); ?></span>
     </div>
   </div>
 
   <nav class="nav-bar">
-    <a href="#" class="nav-link active">Home</a>
-    <a href="#" class="nav-link">Shop</a>
-    <a href="#" class="nav-link">Deals</a>
-    <a href="#" class="nav-link">Contact</a>
+    <a href="homePage.php" class="nav-link">Home</a>
+    <a href="seller.php" class="nav-link active">Dashboard</a>
+    <a href="my_account.php" class="nav-link">My Account</a>
+    <a href="logout.php" class="nav-link">Logout</a>
   </nav>
 
   <div class="body-section">
@@ -373,7 +399,7 @@
       <a href="#" class="sidebar-link active">📊 Dashboard</a>
       <a href="#" class="sidebar-link">📦 My Products</a>
       <a href="#" class="sidebar-link">🛒 Orders</a>
-      <a href="#" class="sidebar-link">👤 Profile</a>
+      <a href="my_account.php" class="sidebar-link">👤 Profile</a>
       <a href="#" class="sidebar-link">⚙️ Settings</a>
       <a href="#" class="sidebar-link">📈 Analytics</a>
     </div>
@@ -381,7 +407,7 @@
     <div class="body-right-section">
 
       <div class="right-top">
-        <p>Welcome Back, User!</p>
+        <p>Welcome Back, <?php echo htmlspecialchars($user['username']); ?>!</p>
         <p>Manage your products, track orders, and grow your business with our easy-to-use seller dashboard.</p>
         <button class="add-product-button">+ Add New Product</button>
       </div>
@@ -446,7 +472,7 @@
   <script>
     const addBtn = document.querySelector('.add-product-button');
     addBtn.addEventListener('click', () => {
-      window.location.href = 'add_product.html';
+      window.location.href = 'add_Product.html';
     });
   </script>
 
