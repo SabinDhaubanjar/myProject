@@ -1,28 +1,15 @@
 <?php
 session_start();
 
-// Check if user is logged in
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.html");
+// Check if seller is logged in
+if (!isset($_SESSION['seller_id'])) {
+    header("Location: seller_login.html");
     exit();
 }
 
-// Connect to database
-$conn = new mysqli("localhost", "root", "", "test");
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Get user details
-$user_id = $_SESSION['user_id'];
-$stmt = $conn->prepare("SELECT username FROM users WHERE id = ?");
-$stmt->bind_param("i", $user_id);
-$stmt->execute();
-$result = $stmt->get_result();
-$user = $result->fetch_assoc();
-$stmt->close();
-$conn->close();
+// Get seller details from session
+$shop_name = $_SESSION['shop_name'];
+$owner_name = $_SESSION['owner_name'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -39,7 +26,7 @@ $conn->close();
     }
 
     body {
-      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-family: 'Poppins', sans-serif;
       background-color: #f5f7fa;
       color: #2d3748;
     }
@@ -83,6 +70,20 @@ $conn->close();
       gap: 15px;
       color: white;
       font-weight: 500;
+    }
+
+    .seller-info {
+      text-align: right;
+    }
+
+    .seller-info .shop-name {
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    .seller-info .owner-name {
+      font-size: 13px;
+      opacity: 0.9;
     }
 
     /* Navigation Bar */
@@ -382,15 +383,17 @@ $conn->close();
     </div>
     <div class="middle-section">Seller Dashboard</div>
     <div class="right-section">
-      <span>👤 <?php echo htmlspecialchars($user['username']); ?></span>
+      <div class="seller-info">
+        <div class="shop-name">🏪 <?php echo htmlspecialchars($shop_name); ?></div>
+        <div class="owner-name">👤 <?php echo htmlspecialchars($owner_name); ?></div>
+      </div>
     </div>
   </div>
 
   <nav class="nav-bar">
     <a href="homePage.php" class="nav-link">Home</a>
     <a href="seller.php" class="nav-link active">Dashboard</a>
-    <a href="my_account.php" class="nav-link">My Account</a>
-    <a href="logout.php" class="nav-link">Logout</a>
+    <a href="seller_logout.php" class="nav-link">Logout</a>
   </nav>
 
   <div class="body-section">
@@ -399,16 +402,16 @@ $conn->close();
       <a href="#" class="sidebar-link active">📊 Dashboard</a>
       <a href="#" class="sidebar-link">📦 My Products</a>
       <a href="#" class="sidebar-link">🛒 Orders</a>
-      <a href="my_account.php" class="sidebar-link">👤 Profile</a>
       <a href="#" class="sidebar-link">⚙️ Settings</a>
       <a href="#" class="sidebar-link">📈 Analytics</a>
+      <a href="seller_logout.php" class="sidebar-link">🚪 Logout</a>
     </div>
 
     <div class="body-right-section">
 
       <div class="right-top">
-        <p>Welcome Back, <?php echo htmlspecialchars($user['username']); ?>!</p>
-        <p>Manage your products, track orders, and grow your business with our easy-to-use seller dashboard.</p>
+        <p>Welcome Back, <?php echo htmlspecialchars($owner_name); ?>!</p>
+        <p>Manage your products, track orders, and grow <?php echo htmlspecialchars($shop_name); ?> with our easy-to-use seller dashboard.</p>
         <button class="add-product-button">+ Add New Product</button>
       </div>
 

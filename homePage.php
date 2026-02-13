@@ -42,16 +42,16 @@ $carousel_result = $conn->query($carousel_sql);
   </div>
 
   <div class="middle-section">
-    <input type="text" class="search-bar" placeholder="Search products...">
-    <button class="search-button">
+    <input type="text" class="search-bar" id="searchBar" placeholder="Search products...">
+    <button class="search-button" onclick="searchProducts()">
       <img src="images/icons/search-icon.png" class="search-icon">
     </button>
   </div>
 
   <div class="right-section">
-    <p>Products</p>
+    <p onclick="scrollToProducts()">Products</p>
+    <p onclick="window.location.href='seller_login.html'">Become Seller</p>
     <p>Best Deals</p>
-    <p>New Releases</p>
     <button class="cart-button" onclick="toggleCart()">
       🛒 Cart <span class="cart-count" id="cart-count">0</span>
     </button>
@@ -74,6 +74,10 @@ $carousel_result = $conn->query($carousel_sql);
     <li onclick="checkLoginAndRedirect('my_account.php')">
       <span class="icon">👤</span>
       <span>My Account</span>
+    </li>
+    <li onclick="window.location.href='seller_login.html'">
+      <span class="icon">🏪</span>
+      <span>Become Seller</span>
     </li>
     <li onclick="window.location.href='about.html'">
       <span class="icon">ℹ️</span>
@@ -171,13 +175,13 @@ $carousel_result = $conn->query($carousel_sql);
   <div class="featured-product" id="products-section">
     <p class="featured-product-section">Featured Products</p>
 
-    <div class="product-grid">
+    <div class="product-grid" id="productGrid">
       <?php 
       $result->data_seek(0);
       if ($result->num_rows > 0): 
       ?>
         <?php while ($row = $result->fetch_assoc()): ?>
-          <div class="product-column">
+          <div class="product-column" data-name="<?php echo strtolower($row['name']); ?>" data-description="<?php echo strtolower($row['description']); ?>">
             <div class="product-image">
               <img src="<?php echo $row['image']; ?>" alt="Product Image" class="product-img">
             </div>
@@ -198,6 +202,41 @@ $carousel_result = $conn->query($carousel_sql);
 </div>
 
 <script>
+// Search functionality
+function searchProducts() {
+  const searchTerm = document.getElementById('searchBar').value.toLowerCase();
+  const productColumns = document.querySelectorAll('.product-column');
+  let foundAny = false;
+
+  productColumns.forEach(product => {
+    const name = product.getAttribute('data-name');
+    const description = product.getAttribute('data-description');
+    
+    if (name.includes(searchTerm) || description.includes(searchTerm)) {
+      product.style.display = 'block';
+      foundAny = true;
+    } else {
+      product.style.display = 'none';
+    }
+  });
+
+  if (!foundAny && searchTerm !== '') {
+    showNotification('No products found matching your search');
+  }
+
+  // Scroll to products section
+  if (searchTerm !== '') {
+    scrollToProducts();
+  }
+}
+
+// Allow Enter key to search
+document.getElementById('searchBar').addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') {
+    searchProducts();
+  }
+});
+
 // Check if user is logged in before redirecting
 function checkLoginAndRedirect(page) {
   <?php if(isset($_SESSION['user_id'])): ?>
@@ -211,7 +250,6 @@ function checkLoginAndRedirect(page) {
 // Cart functionality
 let cart = [];
 
-// Load cart from localStorage
 function loadCart() {
   const savedCart = localStorage.getItem('cart');
   if (savedCart) {
@@ -220,12 +258,10 @@ function loadCart() {
   }
 }
 
-// Save cart to localStorage
 function saveCart() {
   localStorage.setItem('cart', JSON.stringify(cart));
 }
 
-// Add to cart
 function addToCart(product) {
   const existingItem = cart.find(item => item.id === product.id);
   
@@ -246,14 +282,12 @@ function addToCart(product) {
   showNotification('Product added to cart!');
 }
 
-// Remove from cart
 function removeFromCart(productId) {
   cart = cart.filter(item => item.id !== productId);
   saveCart();
   updateCartUI();
 }
 
-// Update quantity
 function updateQuantity(productId, change) {
   const item = cart.find(item => item.id === productId);
   if (item) {
@@ -267,17 +301,14 @@ function updateQuantity(productId, change) {
   }
 }
 
-// Update cart UI
 function updateCartUI() {
   const cartCount = document.getElementById('cart-count');
   const cartItems = document.getElementById('cart-items');
   const cartTotal = document.getElementById('cart-total');
   
-  // Update count
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
   cartCount.textContent = totalItems;
   
-  // Update items
   if (cart.length === 0) {
     cartItems.innerHTML = '<div class="empty-cart">Your cart is empty</div>';
   } else {
@@ -298,18 +329,15 @@ function updateCartUI() {
     `).join('');
   }
   
-  // Update total
   const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   cartTotal.textContent = `₹${total.toFixed(2)}`;
 }
 
-// Toggle cart
 function toggleCart() {
   const cartSidebar = document.getElementById('cart-sidebar');
   cartSidebar.classList.toggle('active');
 }
 
-// Checkout
 function checkout() {
   if (cart.length === 0) {
     alert('Your cart is empty!');
@@ -317,7 +345,6 @@ function checkout() {
   }
   
   <?php if(isset($_SESSION['user_id'])): ?>
-    // Save order to localStorage (simulating order placement)
     const orders = JSON.parse(localStorage.getItem('orders') || '[]');
     const order = {
       id: Date.now(),
@@ -329,7 +356,6 @@ function checkout() {
     orders.push(order);
     localStorage.setItem('orders', JSON.stringify(orders));
     
-    // Clear cart
     cart = [];
     saveCart();
     updateCartUI();
@@ -342,7 +368,6 @@ function checkout() {
   <?php endif; ?>
 }
 
-// Show My Orders
 function showMyOrders() {
   <?php if(isset($_SESSION['user_id'])): ?>
     const orders = JSON.parse(localStorage.getItem('orders') || '[]');
@@ -382,40 +407,32 @@ function showMyOrders() {
   <?php endif; ?>
 }
 
-// Close orders modal
 function closeOrdersModal() {
   document.getElementById('orders-modal').classList.remove('active');
 }
 
-// Show notification
 function showNotification(message) {
   const notification = document.createElement('div');
   notification.className = 'notification';
   notification.textContent = message;
   document.body.appendChild(notification);
   
-  setTimeout(() => {
-    notification.classList.add('show');
-  }, 10);
-  
+  setTimeout(() => notification.classList.add('show'), 10);
   setTimeout(() => {
     notification.classList.remove('show');
     setTimeout(() => notification.remove(), 300);
   }, 3000);
 }
 
-// Scroll to products
 function scrollToProducts() {
   document.getElementById('products-section').scrollIntoView({ behavior: 'smooth' });
 }
 
-// Sidebar Toggle
 function toggleSidebar() {
   const sidebar = document.getElementById('sidebar');
   sidebar.classList.toggle('active');
 }
 
-// Close sidebar when clicking outside
 document.addEventListener('click', function(event) {
   const sidebar = document.getElementById('sidebar');
   const hamburger = document.querySelector('.hamburger-menu');
@@ -458,13 +475,11 @@ function currentSlide(index) {
   showSlide(currentSlideIndex);
 }
 
-// Auto-play carousel
 setInterval(() => {
   currentSlideIndex++;
   showSlide(currentSlideIndex);
 }, 5000);
 
-// Load cart on page load
 loadCart();
 </script>
 
