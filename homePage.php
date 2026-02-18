@@ -6,7 +6,7 @@ if (!isset($_SESSION['cart'])) {
     $_SESSION['cart'] = array();
 }
 
-$conn = new mysqli("localhost", "root", "", "test");
+$conn = new mysqli("localhost:3307", "root", "", "test");
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);

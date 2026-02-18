@@ -1,6 +1,12 @@
 <?php
+
+session_start();
+if(!isset($_SESSION['seller_id'])){
+    header("Location:seller_login.php");
+    exit();
+}
 // Database connection details
-$host = 'localhost'; 
+$host = 'localhost:3307'; 
 $user = 'root';  
 $pass = '';      
 $dbname = 'test';  
@@ -18,6 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $product_name = $_POST['product_name'];
     $price = $_POST['price'];
     $description = $_POST['description'];
+
+    $seller_id=$_SESSION['seller_id'];
     
     // Handle image upload
     $target_dir = "uploads/";  // Directory to store uploaded images
@@ -44,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Check file size (limit to 5MB)
-    if ($_FILES["product_image"]["size"] > 5000000) {
+    if ($_FILES["product_image"]["size"] > 6000000) {
         echo "Sorry, your file is too large.";
         $uploadOk = 0;
     }
@@ -63,8 +71,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             echo "The file " . htmlspecialchars(basename($_FILES["product_image"]["name"])) . " has been uploaded.";
 
             // Prepare the SQL statement to insert data into the database
-            $stmt = $conn->prepare("INSERT INTO products (name, image, price, description) VALUES (?, ?, ?, ?)");
-            $stmt->bind_param("ssss", $product_name, $target_file, $price, $description);
+           $stmt = $conn->prepare("INSERT INTO products (name, image, price, description, seller_id) VALUES (?, ?, ?, ?, ?)");
+$stmt->bind_param("ssisi", $product_name, $target_file, $price, $description, $seller_id);
+
             
             // Execute the statement
             if ($stmt->execute()) {

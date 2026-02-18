@@ -1,4 +1,5 @@
 <?php
+$page = isset($_GET['page'])?$_GET['page']:'';
 session_start();
 
 // Check if seller is logged in
@@ -8,6 +9,7 @@ if (!isset($_SESSION['seller_id'])) {
 }
 
 // Get seller details from session
+//$s_id=$_SESSION['seller_id'];
 $shop_name = $_SESSION['shop_name'];
 $owner_name = $_SESSION['owner_name'];
 ?>
@@ -399,8 +401,9 @@ $owner_name = $_SESSION['owner_name'];
   <div class="body-section">
 
     <div class="sidebar">
-      <a href="#" class="sidebar-link active">📊 Dashboard</a>
-      <a href="#" class="sidebar-link">📦 My Products</a>
+      <a href="seller.php" class="sidebar-link active">📊 Dashboard</a>
+      <a href="seller.php?page=myProduct" class="sidebar-link">📦 My Products</a>
+      
       <a href="#" class="sidebar-link">🛒 Orders</a>
       <a href="#" class="sidebar-link">⚙️ Settings</a>
       <a href="#" class="sidebar-link">📈 Analytics</a>
@@ -409,6 +412,12 @@ $owner_name = $_SESSION['owner_name'];
 
     <div class="body-right-section">
 
+      <?php  if($page=='myProduct'){
+        include 'myProduct.php';
+      }
+      else{
+     
+        ?>
       <div class="right-top">
         <p>Welcome Back, <?php echo htmlspecialchars($owner_name); ?>!</p>
         <p>Manage your products, track orders, and grow <?php echo htmlspecialchars($shop_name); ?> with our easy-to-use seller dashboard.</p>
@@ -467,10 +476,11 @@ $owner_name = $_SESSION['owner_name'];
 
         </div>
       </div>
-
+      <?php    
+      }
+      ?>
     </div>
   </div>
-
 
   <script>
     const addBtn = document.querySelector('.add-product-button');

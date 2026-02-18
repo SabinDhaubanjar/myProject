@@ -2,7 +2,7 @@
 session_start();
 
 // Database connection
-$conn = new mysqli("localhost", "root", "", "test");
+$conn = new mysqli("localhost:3307", "root", "", "test");
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Email not found
         echo "<script>
             alert('Seller account not found! Please register first.');
-            window.location.href = 'seller_register.html';
+            window.location.href = 'seller_registration.php';
         </script>";
     }
 

@@ -8,7 +8,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // Connect to database
-$conn = new mysqli("localhost", "root", "", "test");
+$conn = new mysqli("localhost:3307", "root", "", "test");
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
@@ -130,7 +130,7 @@ $conn->close();
         }
 
         .action-btn {
-            padding: 12px 20px;
+             padding: 12px 20px;
             border: none;
             border-radius: 8px;
             cursor: pointer;
@@ -176,7 +176,6 @@ $conn->close();
     </style>
 </head>
 <body>
-
 <div class="header">
     <h1>My Account</h1>
 </div>
