@@ -1,70 +1,60 @@
- <?php 
-// session_start();
- $conn=mysqli_connect("localhost:3307","root","","test");
-    if(!$conn){
-        die("connection failed");
-    }
+<?php
+// admin_seller.php - Display all sellers
 
-//  if (!isset($_SESSION['seller_id'])) {
-//     die("You must log in first.");
-// }
-if(isset($_GET['id'])){
-    $seller_id = $_GET['id'];
+// Connect to database
+$conn = new mysqli("localhost", "root", "", "test");
 
-    // Delete seller's products first
-    $del_prod = "DELETE FROM products WHERE seller_id = $seller_id";
-    mysqli_query($conn, $del_prod);
-
-    // Delete seller
-    $del_seller = "DELETE FROM sellers WHERE id = $seller_id";
-    mysqli_query($conn, $del_seller);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
 
-    $sql="select * from sellers";
-    $res=mysqli_query($conn,$sql);
+// Handle delete request
+if(isset($_GET['delete_id'])) {
+    $delete_id = $_GET['delete_id'];
+    $conn->query("DELETE FROM sellers WHERE id = $delete_id");
+    echo "<script>alert('Seller deleted successfully!'); window.location.href='admin_dashboard.php?page=admin_seller';</script>";
+}
 
+// Get all sellers
+$result = $conn->query("SELECT * FROM sellers ORDER BY id DESC");
+?>
+
+<div class="content-card">
+    <h3>Manage Sellers</h3>
     
-           ?>
-           <h2>Seller Management</h2>
-              <table border="1">
- <tr>
+    <?php if($result->num_rows > 0): ?>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Shop Name</th>
+                    <th>Owner Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Registered On</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php while($row = $result->fetch_assoc()): ?>
+                <tr>
+                    <td><?php echo $row['id']; ?></td>
+                    <td><?php echo htmlspecialchars($row['shop_name']); ?></td>
+                    <td><?php echo htmlspecialchars($row['owner_name']); ?></td>
+                    <td><?php echo htmlspecialchars($row['email']); ?></td>
+                    <td><?php echo htmlspecialchars($row['phone']); ?></td>
+                    <td><?php echo date('M d, Y', strtotime($row['created_at'])); ?></td>
+                    <td>
+                        <button class="action-btn btn-view" onclick="alert('View seller details')">View</button>
+                        <button class="del_btn" onclick="if(confirm('Are you sure you want to delete this seller?')) window.location.href='admin_dashboard.php?page=admin_seller&delete_id=<?php echo $row['id']; ?>'">Delete</button>
+                    </td>
+                </tr>
+                <?php endwhile; ?>
+            </tbody>
+        </table>
+    <?php else: ?>
+        <p style="text-align: center; padding: 40px; color: #718096;">No sellers found.</p>
+    <?php endif; ?>
+</div>
 
-    <th>id</th>
-    <th>shop_name</th>
-    <th>owner_name</th>
-    <th>email</th>
-    <th>number</th>
-    <th>delete</th>
- </tr>
- <?php
- if($res){
-        while($row=mysqli_fetch_assoc($res)){
-            ?>
-           <tr>
-    <td>
-         <?php echo $row['id'] ?>
-    </td>
-    <td>
-         <?php echo  $row['shop_name'] ?>
-</td>
-    <td>
-         <?php echo  $row['owner_name'] ?>
-    </td>
-     <td>
-         <?php echo  $row['email'] ?>
-    </td>
-    <td>
-         <?php echo  $row['phone'] ?>
-    </td>
-    <td><a onclick="return  confirm('Are you sure you want to delete??');" class='del_btn' href='admin_seller.php?id= 
-    <?php echo $row['id'] ?>' >delete </a> </td>
-</tr>
-<?php
-        }
-    }
-
- ?>
-
-</table>
-
-    
+<?php $conn->close(); ?>

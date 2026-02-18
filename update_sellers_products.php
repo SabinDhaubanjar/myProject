@@ -1,6 +1,6 @@
 <?php
     
-     $conn=mysqli_connect("localhost:3307","root","","test");
+     $conn=mysqli_connect("localhost","root","","test");
     if(!$conn){
         die("connection failed");
     }

@@ -6,7 +6,7 @@ if(!isset($_SESSION['seller_id'])){
     exit();
 }
 // Database connection details
-$host = 'localhost:3307'; 
+$host = 'localhost'; 
 $user = 'root';  
 $pass = '';      
 $dbname = 'test';  

@@ -1,48 +1,51 @@
- <?php 
- $conn=mysqli_connect("localhost:3307","root","","test");
-    if(!$conn){
-        die("connection failed");
-    }
+<?php
+// dashboard.php - Include file for admin dashboard
 
-    $sql="select count(*) as total_user from users";
-    $u_res=mysqli_query($conn,$sql);
-    if($u_res){
-        while($row=mysqli_fetch_assoc($u_res)){
-            $u_total=$row['total_user'];
-        }
-    }
-    $sql="select count(*) as total_products from products";
-     $p_res=mysqli_query($conn,$sql);
-    if($p_res){
-        while($row=mysqli_fetch_assoc($p_res)){
-            $p_total=$row['total_products'];
-        }
-    }
-    $sql="select count(*) as total_sellers from sellers";
-     $s_res=mysqli_query($conn,$sql);
-    if($s_res){
-        while($row=mysqli_fetch_assoc($s_res)){
-            $s_total=$row['total_sellers'];
-        }
-    }
-    
-    
-    ?>
-    <div class="dashboard">
+// Connect to database
+$conn = new mysqli("localhost", "root", "", "test");
 
-        <div style="border: 1px solid black;">
-    <h4>users 👥</h4>
-    <?php  echo $u_total ?>
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Get statistics
+$total_users = $conn->query("SELECT COUNT(*) as count FROM users")->fetch_assoc()['count'];
+$total_sellers = $conn->query("SELECT COUNT(*) as count FROM sellers")->fetch_assoc()['count'];
+$total_products = $conn->query("SELECT COUNT(*) as count FROM products")->fetch_assoc()['count'];
+
+$conn->close();
+?>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <span class="icon">👥</span>
+        <h3>Total Users</h3>
+        <div class="number"><?php echo $total_users; ?></div>
     </div>
 
-     <div style="border: 1px solid black;">
-    <h5>sellers 👥🧍🏽‍♀️</h5>
-    <?php  echo $s_total ?>
-     </div>
+    <div class="stat-card">
+        <span class="icon">🏪</span>
+        <h3>Total Sellers</h3>
+        <div class="number"><?php echo $total_sellers; ?></div>
+    </div>
 
-     <div style="border: 1px solid black;">
-    <h5>Products 🛒🛍️✨</h5>
-    <?php  echo $p_total ?>
+    <div class="stat-card">
+        <span class="icon">📦</span>
+        <h3>Total Products</h3>
+        <div class="number"><?php echo $total_products; ?></div>
+    </div>
+
+    <div class="stat-card">
+        <span class="icon">💰</span>
+        <h3>Total Revenue</h3>
+        <div class="number">₹0</div>
+    </div>
 </div>
 
+<div class="content-card">
+    <h3>Quick Overview</h3>
+    <p style="color: #718096; line-height: 1.8;">
+        Welcome to the Market Hub Admin Dashboard. Here you can manage users, sellers, products, and monitor your marketplace performance. 
+        Use the navigation menu on the left to access different sections.
+    </p>
 </div>

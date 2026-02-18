@@ -1,72 +1,62 @@
- <?php 
- session_start();
- $conn=mysqli_connect("localhost:3307","root","","test");
-    if(!$conn){
-        die("connection failed");
-    }
-    
-    if(isset($_GET['id'])){
-        $id=$_GET['id'];
-        $del_sql="delete from products where  id= $id";
-          $del_res = mysqli_query($conn, $del_sql);
-          if($del_res){
-            header("Location:admin_dashboard.php?page=admin_seller");
-          }
-    }
-   
+<?php
+// product.php - Display all products
 
-    $sql="select * from products";
-    $res=mysqli_query($conn,$sql);
+// Connect to database
+$conn = new mysqli("localhost", "root", "", "test");
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Handle delete request
+if(isset($_GET['delete_id'])) {
+    $delete_id = $_GET['delete_id'];
+    $conn->query("DELETE FROM products WHERE id = $delete_id");
+    echo "<script>alert('Product deleted successfully!'); window.location.href='admin_dashboard.php?page=product';</script>";
+}
+
+// Get all products
+$result = $conn->query("SELECT * FROM products ORDER BY id DESC");
+?>
+
+<div class="content-card">
+    <h3>Manage Products</h3>
     
-            ?>
-            <h2>product Management</h2>
-            <table style="
-            border:1px solid black;
-            ">
+    <?php if($result->num_rows > 0): ?>
+        <table>
+            <thead>
                 <tr>
-                    <th>Product Id</th>
-                    <th>Product Namee</th>
-                    <th>product Image</th>
-                    <th>product Price</th>
-                    <th>Product Description</th>
-                    <th>Date and Time</th>
-                    <th>Seller_id</th>
-                    <th>delete product</th>
+                    <th>ID</th>
+                    <th>Image</th>
+                    <th>Product Name</th>
+                    <th>Price</th>
+                    <th>Description</th>
+                    <th>Added On</th>
+                    <th>Actions</th>
                 </tr>
-                <?php if($res){
+            </thead>
+            <tbody>
+                <?php while($row = $result->fetch_assoc()): ?>
+                <tr>
+                    <td><?php echo $row['id']; ?></td>
+                    <td>
+                        <img src="<?php echo $row['image']; ?>" alt="Product" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;">
+                    </td>
+                    <td><?php echo htmlspecialchars($row['name']); ?></td>
+                    <td>₹<?php echo number_format($row['price'], 2); ?></td>
+                    <td><?php echo htmlspecialchars(substr($row['description'], 0, 50)) . '...'; ?></td>
+                    <td><?php echo date('M d, Y', strtotime($row['created_at'])); ?></td>
+                    <td>
+                        <button class="action-btn btn-edit" onclick="alert('Edit product')">Edit</button>
+                        <button class="del_btn" onclick="if(confirm('Are you sure you want to delete this product?')) window.location.href='admin_dashboard.php?page=product&delete_id=<?php echo $row['id']; ?>'">Delete</button>
+                    </td>
+                </tr>
+                <?php endwhile; ?>
+            </tbody>
+        </table>
+    <?php else: ?>
+        <p style="text-align: center; padding: 40px; color: #718096;">No products found.</p>
+    <?php endif; ?>
+</div>
 
-        while($row=mysqli_fetch_assoc($res)){
-             
-               ?>
-                    <td>
-                        <?php echo $row['id']?>
-                    </td>
-                    <td>
-                        <?php echo $row['name'] ?>
-                    </td>
-                    <td>
-                       <img  width="100" src="<?php echo $row['image']  ?>"> 
-                    </td>
-                    <td>
-                         <?php echo $row['price']?>
-                    </td>
-                    <td>
-                        <?php echo $row['description']?>
-                    </td>
-                    <td>
-                        <?php echo $row['created_at']?>
-                    </td>
-                    <td>
-                        <?php echo $row['seller_id']?>
-                    </td>
-                     <td>
-                       
-                     <a onclick="return confirm('Are you sure you want to delete');" class='del_btn' href='product.php?id=<?php echo $row['id']?>'>delete</a>
-                     </td>
-                </tr>
-                <?php
-                }
-                }
-                
-                ?>
-            </table>
+<?php $conn->close(); ?>

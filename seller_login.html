@@ -97,6 +97,24 @@
             color: #a0aec0;
         }
 
+        .forgot-password {
+            text-align: right;
+            margin-top: 8px;
+        }
+
+        .forgot-password a {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .forgot-password a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
         button {
             width: 100%;
             padding: 14px;
@@ -115,6 +133,10 @@
         button:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
         }
 
         .register-link {
@@ -198,10 +220,10 @@
         <div class="form-group">
             <label for="password">Password</label>
             <input type="password" id="password" name="password" placeholder="Enter your password" required>
-        </div>
-        <div class="forgot-password">
+            <div class="forgot-password">
                 <a href="seller_forget_pass.php">Forgot Password?</a>
             </div>
+        </div>
 
         <button type="submit">Login to Dashboard</button>
     </form>
@@ -211,7 +233,7 @@
     </div>
 
     <div class="register-link">
-        Don't have a seller account? <a href="seller_registration.php">Register</a>
+        Don't have a seller account? <a href="seller_register.html">Register</a>
     </div>
 
     <div class="back-link">

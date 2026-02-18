@@ -8,7 +8,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // Connect to database
-$conn = new mysqli("localhost:3307", "root", "", "test");
+$conn = new mysqli("localhost", "root", "", "test");
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);

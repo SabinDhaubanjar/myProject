@@ -217,9 +217,9 @@
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" placeholder="Create a password" required>
                 <?php
-                if(isset($_SESSION['spass_err'])){
-                echo $_SESSION['spass_err'];
-                unset($_SESSION['spass_err']);
+                if(isset($_SESSION['spass_error'])){
+                echo $_SESSION['spass_error'];
+                unset($_SESSION['spass_error']);
             }
             ?>
             </div>
